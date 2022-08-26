@@ -1,4 +1,21 @@
+import os
+import logging
 from google.cloud import dialogflow_v2 as df
+from telegram import Bot
+
+
+logger = logging.getLogger(__file__)
+
+
+class TelegramLogsHandler(logging.Handler):
+    def __init__(self):
+        super().__init__()
+        self.chat_id = os.environ['TG_CHATID']
+        self.tg_bot = Bot(os.environ['TG_BOT_TOKEN'])
+
+    def emit(self, record):
+        log_entry = self.format(record)
+        self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
 
 
 def detect_intent_texts(project_id, session_id, text, language_code='ru-RU'):

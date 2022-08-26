@@ -17,6 +17,7 @@ GOOGLE_APPLICATION_CREDENTIALS - путь к json-файлу с Google credentia
 GOOGLE_CLOUD_PROJECT - ID проекта из п.2  
 TG_BOT_TOKEN - API ключ вашего телерам-бота. Создать бота и получить API ключ можно с помощью @BotFather.  
 VK_TOKEN - API-ключ группы VK, [инструкция](https://pechenek.net/social-networks/vk/api-vk-poluchaem-klyuch-dostupa-token-gruppy/)
+TG_CHATID - chat_id телеграм-аккаунта, куда будут отправляться логи. Чтобы получить свой chat_id, напишите в Telegram специальному боту: @userinfobot.
   
 4. Загрузите в нейросеть тренировочные фразы:
 ```
