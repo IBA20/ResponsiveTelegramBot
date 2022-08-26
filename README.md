@@ -1,6 +1,8 @@
 # Чат-боты на Python «Распознаём речь»
 
 Учебный проект курса "От джуна до мидла" компании Devman.
+[Пример работающего бота](https://t.me/suppservbot)  
+![image](https://dvmn.org/media/filer_public/7a/08/7a087983-bddd-40a3-b927-a43fb0d2f906/demo_tg_bot.gif)
 
 ## Задание
 
@@ -34,6 +36,17 @@ python tg.py
 python vk.py
 
 ```  
+## Особенности деплоя на Heroku
+Перед деплоем необходимо сделать следующее:  
+1. Переменная окружения GOOGLE_APPLICATION_CREDENTIALS должна содержать строку 'google-credentials.json'    
+2. В дополнительную переменную окружения GOOGLE_CREDENTIALS скопируйте содержимое вашего json-файла с Google credentials.  
+3. Остальные переменные окружения создайте как описано выше в разделе Установка и запуск.
+4. На вкладке Settings нажмите Add Buildpack и добавьте
+```
+https://github.com/gerynugrh/heroku-google-application-credentials-buildpack
+
+```  
+5. Там же добавьте стандартный пакет heroku/python
 
 
 ## Цели проекта
