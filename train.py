@@ -1,8 +1,10 @@
 import os
-import os
 import sys
 import json
+import logging
 from google.cloud import dialogflow_v2 as df
+
+logger = logging.getLogger(__file__)
 
 
 def create_intent(project_id, display_name, training_phrases_parts, message_texts):
@@ -33,16 +35,13 @@ def create_intent(project_id, display_name, training_phrases_parts, message_text
 def main():
     with open(sys.argv[1]) as file:
         intents = json.load(file)
-    for k, v in intents.items():
-        intent_name = k
-        questions = v['questions']
-        answer = v['answer']
+    for intent_name, params in intents.items():
+        questions = params['questions']
+        answer = params['answer']
         try:
             create_intent(os.environ['GOOGLE_CLOUD_PROJECT'], intent_name, questions, [answer])
-        except Exception as err:
-            print('ERROR!!!')
-            print(err)
-        break
+        except Exception:
+            logger.exception()
 
 
 if __name__ == '__main__':

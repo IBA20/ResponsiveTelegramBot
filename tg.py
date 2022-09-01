@@ -1,26 +1,36 @@
 import os
 import logging
-import neurnet as nn
+import utilities
 from telegram import Update
 from telegram.ext import Updater, CallbackContext, CommandHandler, MessageHandler, Filters
 
+logger = logging.getLogger(__file__)
 
 
 def start(update: Update, context: CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Здравствуйте")
 
-# def echo(update: Update, context: CallbackContext):
-#     context.bot.send_message(chat_id=update.effective_chat.id, text=update.message.text)
 
-def dialog(update: Update, context: CallbackContext):
-    fallback, reply_text = nn.detect_intent_texts(os.environ['GOOGLE_CLOUD_PROJECT'], update.effective_chat.id, update.message.text)
+def get_reply_message(update: Update, context: CallbackContext):
+    fallback, reply_text = utilities.detect_intent_texts(
+        os.environ['GOOGLE_CLOUD_PROJECT'], 
+        update.effective_chat.id, 
+        update.message.text,
+    )
     context.bot.send_message(chat_id=update.effective_chat.id, text=reply_text)
 
+
 def main():
-    logger = logging.getLogger(__file__)
     logger.setLevel(logging.INFO)
-    handler = nn.TelegramLogsHandler()
-    handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+    handler = utilities.TelegramLogsHandler(
+        os.environ['TG_BOT_TOKEN'], 
+        os.environ['TG_CHATID'],
+    )
+    handler.setFormatter(
+        logging.Formatter(
+            '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        )
+    )
     logger.addHandler(handler)
     
     updater = Updater(token=os.environ['TG_BOT_TOKEN'])    
@@ -28,9 +38,10 @@ def main():
     
     start_handler = CommandHandler('start', start)
     dispatcher.add_handler(start_handler)
-    # echo_handler = MessageHandler(Filters.text & (~Filters.command), echo)
-    # dispatcher.add_handler(echo_handler)
-    dialog_handler = MessageHandler(Filters.text & (~Filters.command), dialog)
+    dialog_handler = MessageHandler(
+        Filters.text & (~Filters.command), 
+        get_reply_message
+    )
     dispatcher.add_handler(dialog_handler)
     try:
         logger.info('Support service bot started')
